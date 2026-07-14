@@ -1,5 +1,4 @@
 import { ComponentProps } from "react"
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import {
   CompositeScreenProps,
   NavigationContainer,
@@ -19,18 +18,32 @@ export type DemoTabParamList = {
 export type AppStackParamList = {
   Welcome: undefined
   Login: undefined
-  Demo: NavigatorScreenParams<DemoTabParamList>
-  // 🔥 Your screens go here
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  [ROUTES.EVENTS_NAVIGATOR]: NavigatorScreenParams<DemoStackParamList>
 }
 
+export const ROUTES = {
+  EVENTS: "Events",
+  EVENT_DETAILS: "EventDetails",
+  EVENTS_NAVIGATOR: "EventsNavigator",
+} as const
+
+export type Routes = typeof ROUTES
+
+// usage
+
+export type DemoStackParamList = {
+  [ROUTES.EVENTS]: undefined
+  [ROUTES.EVENT_DETAILS]: {
+    eventId: string
+  }
+}
 export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<
   AppStackParamList,
   T
 >
 
-export type DemoTabScreenProps<T extends keyof DemoTabParamList> = CompositeScreenProps<
-  BottomTabScreenProps<DemoTabParamList, T>,
+export type EventsStackScreenProps<T extends keyof DemoStackParamList> = CompositeScreenProps<
+  NativeStackScreenProps<DemoStackParamList, T>,
   AppStackScreenProps<keyof AppStackParamList>
 >
 
