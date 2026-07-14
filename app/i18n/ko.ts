@@ -7,6 +7,7 @@ const ko: Translations = {
     cancel: "취소",
     back: "뒤로",
     logOut: "로그아웃",
+    toggleTheme: "Toggle Theme {{theme}} ",
   },
   welcomeScreen: {
     postscript:

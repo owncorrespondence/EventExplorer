@@ -7,6 +7,7 @@ const fr: Translations = {
     cancel: "Annuler",
     back: "Retour",
     logOut: "Déconnexion",
+    toggleTheme: "Toggle Theme {{theme}} ",
   },
   welcomeScreen: {
     postscript:

@@ -9,6 +9,16 @@ const en = {
     toggleTheme: "Toggle Theme {{theme}} ",
   },
 
+  eventsScreen: {
+    favourites: "Favourites",
+    search: "Search event",
+    placeholder: "World cup",
+  },
+  favouriteEventsScreen: {
+    button: {
+      title: "Search events",
+    },
+  },
   eventDetailsScreen: {
     saved: "Saved",
     save: "Save",

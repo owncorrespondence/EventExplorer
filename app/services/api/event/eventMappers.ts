@@ -5,8 +5,8 @@ import type { TicketmasterEvent, TicketmasterImage } from "@/services/api/event/
 export interface EventDetailsView {
   id: string
   name: string
-  heroImage?: string // large hero (undefined → screen shows fallback)
-  when: { date?: string; time?: string; timeZone?: string }
+  heroImage?: string
+  dateInfo: { date?: string; time?: string; timeZone?: string }
   venue?: { name?: string; cityCountry?: string; label?: string }
   tags: string[] // classification / genre chips
   price?: string // only when available
@@ -14,7 +14,7 @@ export interface EventDetailsView {
 }
 // ---------- venue ----------
 
-function formatWhen(event: TicketmasterEvent) {
+function getDateInfo(event: TicketmasterEvent) {
   const start = event.dates?.start
   const timeZone = event.dates?.timezone ?? event._embedded?.venues?.[0]?.timezone
 
@@ -72,12 +72,16 @@ function getPrice(event: TicketmasterEvent): string | undefined {
   return p.max != null && p.max !== p.min ? `${fmt(p.min)} – ${fmt(p.max)}` : fmt(p.min)
 }
 
-export function toEventDetailsView(event: TicketmasterEvent, width: number): EventDetailsView {
+export function toEventDetailsView(
+  event: TicketmasterEvent,
+  width: number,
+  ratio: Ratio,
+): EventDetailsView {
   return {
     id: event.id,
     name: event.name,
-    heroImage: pickImage(event.images, { displayWidth: width, ratio: "16_9" }),
-    when: formatWhen(event),
+    heroImage: getImage(event.images, { displayWidth: width, ratio: ratio }),
+    dateInfo: getDateInfo(event),
     venue: getVenue(event),
     tags: getTags(event),
     price: getPrice(event),
@@ -94,7 +98,7 @@ interface PickOpts {
   ratio?: Ratio
 }
 
-export function pickImage(
+export function getImage(
   images: TicketmasterImage[] | undefined,
   { displayWidth, ratio }: PickOpts,
 ): string | undefined {

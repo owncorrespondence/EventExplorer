@@ -7,6 +7,7 @@ const es: Translations = {
     cancel: "Cancelar",
     back: "Volver",
     logOut: "Cerrar sesión",
+    toggleTheme: "Toggle Theme {{theme}} ",
   },
   welcomeScreen: {
     postscript:

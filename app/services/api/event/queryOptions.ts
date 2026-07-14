@@ -41,7 +41,7 @@ export const getInfinityQueryOptions = () => {
 
     queryFn: async ({ pageParam }) => {
       return api.apisauce.get<EventsSearchResponse>(
-        `/discovery/v2/events.json?apikey=${Config.API_KEY}&page=${pageParam}`,
+        `/discovery/v2/events.json?apikey=${Config.API_KEY}&page=${pageParam}&size=20&sort=date,desc`,
       )
     },
   })

@@ -7,6 +7,7 @@ const ja: Translations = {
     cancel: "キャンセル",
     back: "戻る",
     logOut: "ログアウト",
+    toggleTheme: "Toggle Theme {{theme}} ",
   },
   welcomeScreen: {
     postscript:

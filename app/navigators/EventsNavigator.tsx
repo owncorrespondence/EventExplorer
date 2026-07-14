@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Button } from "@/components/Button"
 import { EventsDetailsScreen } from "@/screens/Events/EventsDetailsScreen"
 import { EventsScreen } from "@/screens/Events/EventsScreen"
-import { FavouriteEventsScreen } from "@/screens/Events/Favourites"
+import { FavouriteEventsScreen } from "@/screens/Events/FavouriteEventsScreen"
 import { useAppTheme } from "@/theme/context"
 
 import { EventstackParamList, ROUTES } from "./navigationTypes"

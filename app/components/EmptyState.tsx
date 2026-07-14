@@ -135,11 +135,11 @@ export function EmptyState(props: EmptyStateProps) {
   const preset = EmptyStatePresets[props.preset ?? "generic"]
 
   const {
-    button = preset.button,
+    button,
     buttonTx,
     buttonOnPress,
     buttonTxOptions,
-    content = preset.content,
+    content,
     contentTx,
     contentTxOptions,
     heading = preset.heading,

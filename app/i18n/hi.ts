@@ -7,6 +7,7 @@ const hi: Translations = {
     cancel: "रद्द करें",
     back: "वापस",
     logOut: "लॉग आउट",
+    toggleTheme: "Toggle Theme {{theme}} ",
   },
   welcomeScreen: {
     postscript:

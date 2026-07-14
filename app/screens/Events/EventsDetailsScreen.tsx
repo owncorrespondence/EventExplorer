@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 import { ActivityIndicator, ScrollView, View, ViewStyle } from "react-native"
 import { useWindowDimensions } from "react-native"
 import { useRoute } from "@react-navigation/native"
@@ -6,14 +6,16 @@ import { useQuery } from "@tanstack/react-query"
 
 import { Button } from "@/components/Button"
 import { EmptyState } from "@/components/EmptyState"
-import { $content, $title } from "@/components/layout"
+import { $content, $globalLoadingContainer, $title } from "@/components/layout"
 import { RemoteImage } from "@/components/RemoteImage"
+import { Screen } from "@/components/Screen"
 import { Tag } from "@/components/Tag"
 import { Text } from "@/components/Text"
 import { FavouriteButton } from "@/components/Toggle/FavouriteButton"
 import { EventsStackScreenProps, Routes } from "@/navigators/navigationTypes"
-import { toEventDetailsView } from "@/services/api/event/eventMappers"
+import { EventDetailsView, toEventDetailsView } from "@/services/api/event/eventMappers"
 import { getEventDetails } from "@/services/api/event/queryOptions"
+import { useIsFavourite, useToggleFavourite } from "@/state/favourites/selectors"
 import { useAppTheme } from "@/theme/context"
 import { $styles } from "@/theme/styles"
 import { ThemedStyle } from "@/theme/types"
@@ -24,24 +26,37 @@ export const EventsDetailsScreen = () => {
   const { params } = useRoute<EventsStackScreenProps<Routes["EVENT_DETAILS"]>["route"]>()
   const { themed } = useAppTheme()
   const $containerInsets = useSafeAreaInsetsStyle(["bottom"])
-  const [favourite, setFavourite] = useState<boolean>(false)
+
+  const favourite = useIsFavourite(params.eventId)
+  const toggle = useToggleFavourite()
   const { width } = useWindowDimensions()
 
   const { data, isError, isFetching, isLoading, refetch } = useQuery({
     ...getEventDetails(params.eventId),
     select: (data) => {
-      return data.data ? toEventDetailsView(data.data, width) : undefined
+      return data.data ? toEventDetailsView(data.data, width, "16_9") : undefined
     },
     staleTime: Infinity,
     gcTime: 1000 * 60 * 5,
   })
 
-  const handleFavouritePress = useCallback(() => {
-    return setFavourite((prevState) => !prevState)
+  const handleFavouritePress = useCallback((item: EventDetailsView) => {
+    toggle({
+      id: item.id,
+      name: item.name,
+      heroImage: item.heroImage,
+      dateInfo: item.dateInfo,
+      tags: item.tags,
+      savedAt: Date.now(),
+    })
   }, [])
 
   if (isLoading || (isFetching && !data)) {
-    return <ActivityIndicator />
+    return (
+      <Screen preset={"fixed"} style={themed($globalLoadingContainer)}>
+        <ActivityIndicator />
+      </Screen>
+    )
   }
 
   if (isError) {
@@ -49,7 +64,12 @@ export const EventsDetailsScreen = () => {
   }
 
   if (!data) {
-    return <EmptyState buttonOnPress={() => refetch()} />
+    return (
+      <EmptyState
+        buttonOnPress={() => refetch()}
+        contentTx={"emptyStateComponent:generic.content"}
+      />
+    )
   }
 
   return (
@@ -63,15 +83,15 @@ export const EventsDetailsScreen = () => {
                 style={themed($content)}
                 tx={favourite ? "eventDetailsScreen:saved" : "eventDetailsScreen:save"}
               />
-              <FavouriteButton liked={favourite} onToggle={handleFavouritePress} />
+              <FavouriteButton liked={favourite} onToggle={() => handleFavouritePress(data)} />
             </View>
           </View>
           <Text style={themed($title)} numberOfLines={3}>
             {data.name}
           </Text>
 
-          <Text style={themed($content)}>{data.when.date}</Text>
-          <Text style={themed($content)}>{data.when.time}</Text>
+          <Text style={themed($content)}>{data.dateInfo.date}</Text>
+          <Text style={themed($content)}>{data.dateInfo.time}</Text>
           <Text style={themed($content)}>{data.venue?.name}</Text>
           <Text style={themed($content)}>{data.venue?.cityCountry}</Text>
           <View style={themed($tagList)}>
@@ -90,9 +110,10 @@ export const EventsDetailsScreen = () => {
   )
 }
 
-const $container: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+const $container: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   flex: 1,
   paddingHorizontal: spacing.md,
+  backgroundColor: colors?.background,
 })
 
 const $favouriteContainer: ThemedStyle<ViewStyle> = () => ({

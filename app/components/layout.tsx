@@ -1,4 +1,4 @@
-import { TextStyle } from "react-native"
+import { TextStyle, ViewStyle } from "react-native"
 
 import type { ThemedStyle } from "@/theme/types"
 
@@ -13,4 +13,16 @@ export const $subtitle: ThemedStyle<TextStyle> = ({ typography }) => ({
 export const $content: ThemedStyle<TextStyle> = ({ typography }) => ({
   fontFamily: typography.primary.normal,
   fontSize: typography.sizes.body,
+})
+export const $contentContainerList: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  gap: spacing.sm,
+})
+
+export const $container: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  paddingHorizontal: spacing.md,
+})
+
+export const $globalLoadingContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  paddingHorizontal: spacing.md,
+  justifyContent: "center",
 })
