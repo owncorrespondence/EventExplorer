@@ -56,9 +56,8 @@ const $container =
     overflow: "hidden",
   })
 
+RemoteImage.displayName = "RemoteImage"
 
 const $center: ViewStyle = { alignItems: "center", justifyContent: "center" }
-
-RemoteImage.displayName = "RemoteImage"
 
 export { RemoteImage }
