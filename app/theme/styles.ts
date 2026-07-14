@@ -13,6 +13,14 @@ export const $styles = {
     paddingHorizontal: spacing.lg,
   } as ViewStyle,
 
+  image: {
+    small: {
+      width: 88,
+      height: 88,
+    } as ViewStyle,
+    big: {},
+  },
+
   toggleInner: {
     width: "100%",
     height: "100%",
@@ -20,4 +28,7 @@ export const $styles = {
     justifyContent: "center",
     overflow: "hidden",
   } as ViewStyle,
-}
+  muted: {
+    opacity: 0.6,
+  } as ViewStyle,
+} as const

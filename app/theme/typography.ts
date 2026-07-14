@@ -68,4 +68,8 @@ export const typography = {
    * Lets get fancy with a monospace font!
    */
   code: Platform.select({ ios: fonts.courier, android: fonts.monospace }),
+  sizes: {
+    title: 18,
+    body: 14,
+  },
 }
