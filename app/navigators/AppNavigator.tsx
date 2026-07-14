@@ -44,17 +44,17 @@ const AppStack = () => {
           backgroundColor: colors.background,
         },
       }}
-      initialRouteName={isAuthenticated ? "Welcome" : "Login"}
+      initialRouteName={isAuthenticated ? ROUTES.WELCOME : ROUTES.LOGIN}
     >
       {isAuthenticated ? (
         <>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name={ROUTES.WELCOME} component={WelcomeScreen} />
 
           <Stack.Screen name={ROUTES.EVENTS_NAVIGATOR} component={EventsNavigator} />
         </>
       ) : (
         <>
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
         </>
       )}
     </Stack.Navigator>

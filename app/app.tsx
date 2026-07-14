@@ -33,10 +33,6 @@ import { ThemeProvider } from "./theme/context"
 import { customFontsToLoad } from "./theme/typography"
 import { loadDateFnsLocale } from "./utils/formatDate"
 
-export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
-
-// Web linking configuration
-
 /**
  * This is the root component of our app.
  * @param {AppProps} props - The props for the `App` component.
