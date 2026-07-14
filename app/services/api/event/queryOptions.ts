@@ -9,7 +9,7 @@ import { ApiResponse } from "apisauce"
 import Config from "@/config"
 import { api } from "@/services/api"
 import { EVENT_KEYS } from "@/services/api/event/eventsKeys"
-import { EventsSearchResponse } from "@/services/api/event/types"
+import { EventDetailsResponse, EventsSearchResponse } from "@/services/api/event/types"
 
 export const getEventsQueryOptions = () => {
   return queryOptions<ApiResponse<EventsSearchResponse>>({
@@ -48,7 +48,7 @@ export const getInfinityQueryOptions = () => {
 }
 
 export const getEventDetails = (eventId: string) => {
-  return queryOptions<ApiResponse<EventsSearchResponse>>({
+  return queryOptions<ApiResponse<EventDetailsResponse>>({
     queryKey: EVENT_KEYS.detail(eventId),
     queryFn: async () => {
       return api.apisauce.get(`/discovery/v2/events/${eventId}?apikey=${Config.API_KEY}`)

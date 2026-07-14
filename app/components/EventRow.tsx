@@ -1,13 +1,7 @@
 import { FC, memo, useCallback, useState } from "react"
-import {
-  Pressable,
-  PressableStateCallbackType,
-  StyleProp,
-  TextStyle,
-  View,
-  ViewStyle,
-} from "react-native"
+import { Pressable, PressableStateCallbackType, StyleProp, View, ViewStyle } from "react-native"
 
+import { $content, $subtitle } from "@/components/layout"
 import { RemoteImage } from "@/components/RemoteImage"
 import { Text } from "@/components/Text"
 import { FavouriteButton } from "@/components/Toggle/FavouriteButton"
@@ -43,7 +37,7 @@ export const EventRow: FC<EventRowProps> = memo(({ item, onItemPress }) => {
       <RemoteImage uri={item.images?.[0]?.url} size={IMAGE_SIZE} radius={8} />
       <View style={themed($rightBlock)}>
         <View style={themed($eventInfoBlock)}>
-          <Text numberOfLines={2} style={themed($title)}>
+          <Text numberOfLines={2} style={themed($subtitle)}>
             {item.name}
           </Text>
           <Text style={[themed($content), $styles.muted]}>{item.dates?.start?.localDate}</Text>
@@ -66,25 +60,17 @@ const $eventInfoBlock: ThemedStyle<ViewStyle> = () => ({
   minWidth: 0,
 })
 
-const $title: ThemedStyle<TextStyle> = ({ typography }) => ({
-  fontFamily: typography.primary.semiBold,
-  fontSize: typography.sizes.title,
-})
-const $content: ThemedStyle<TextStyle> = ({ typography }) => ({
-  fontFamily: typography.primary.normal,
-  fontSize: typography.sizes.body,
-})
-
 const $viewPresets: ThemedStyleArray<ViewStyle> = [
-  ({ colors, spacing }) => ({
+  ({ colors, spacing, borderRadius, elevation }) => ({
     borderWidth: 1,
-    borderRadius: 12,
+    borderRadius: borderRadius.small,
     borderColor: colors.palette.neutral400,
     backgroundColor: colors.palette.neutral100,
     gap: spacing.sm,
     padding: spacing.sm,
     height: 112,
     flexDirection: "row",
+    ...elevation.subtle,
   }),
 ]
 

@@ -1,0 +1,16 @@
+import { TextStyle } from "react-native"
+
+import type { ThemedStyle } from "@/theme/types"
+
+export const $title: ThemedStyle<TextStyle> = ({ typography }) => ({
+  fontFamily: typography.primary.bold,
+  fontSize: typography.sizes.title,
+})
+export const $subtitle: ThemedStyle<TextStyle> = ({ typography }) => ({
+  fontFamily: typography.primary.semiBold,
+  fontSize: typography.sizes.subTitle,
+})
+export const $content: ThemedStyle<TextStyle> = ({ typography }) => ({
+  fontFamily: typography.primary.normal,
+  fontSize: typography.sizes.body,
+})

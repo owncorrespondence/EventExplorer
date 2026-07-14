@@ -39,6 +39,7 @@ export const colors = {
   palette,
   transparent: "rgba(0, 0, 0, 0)",
   text: palette.neutral800,
+  tag: palette.neutral100,
   textDim: palette.neutral600,
   background: palette.neutral200,
   border: palette.neutral400,

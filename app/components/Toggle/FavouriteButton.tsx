@@ -25,7 +25,7 @@ interface FavouriteButtonProps {
   size?: number
 }
 
-const FavouriteButton = memo(({ liked, onToggle, size = 28 }: FavouriteButtonProps) => {
+const FavouriteButton = memo(({ liked, onToggle, size = 24 }: FavouriteButtonProps) => {
   const {
     themed,
     theme: { colors },
@@ -51,7 +51,7 @@ const FavouriteButton = memo(({ liked, onToggle, size = 28 }: FavouriteButtonPro
   }))
 
   return (
-    <Pressable onPress={onToggle} hitSlop={12} style={themed($button)}>
+    <Pressable onPress={onToggle} hitSlop={10} style={themed($button)}>
       <Animated.View style={containerStyle}>
         <Svg width={size} height={size} viewBox="0 0 24 24">
           <AnimatedPath

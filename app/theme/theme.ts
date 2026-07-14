@@ -1,3 +1,5 @@
+import { elevation } from "@/theme/elevation"
+
 import { colors as colorsLight } from "./colors"
 import { colors as colorsDark } from "./colorsDark"
 import { spacing as spacingLight } from "./spacing"
@@ -13,6 +15,10 @@ export const lightTheme: Theme = {
   typography,
   timing,
   isDark: false,
+  borderRadius: {
+    small: 12,
+  },
+  elevation,
 }
 export const darkTheme: Theme = {
   colors: colorsDark,
@@ -20,4 +26,8 @@ export const darkTheme: Theme = {
   typography,
   timing,
   isDark: true,
+  borderRadius: {
+    small: 12,
+  },
+  elevation,
 }
