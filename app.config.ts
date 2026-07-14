@@ -36,6 +36,10 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         ],
       },
     },
+    extra: {
+      ...config.extra,
+      ticketmasterApiKey: process.env.TICKETMASTER_API_KEY,
+    },
     plugins: [...existingPlugins, "expo-image"],
   }
 }

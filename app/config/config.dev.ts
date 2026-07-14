@@ -1,3 +1,5 @@
+import Constants from "expo-constants"
+
 /**
  * These are configuration settings for the dev environment.
  *
@@ -7,4 +9,6 @@
  */
 export default {
   API_URL: "https://api.rss2json.com/v1/",
+  TICKETMASTER_API: "https://app.ticketmaster.com",
+  API_KEY: Constants.expoConfig?.extra?.ticketmasterApiKey ?? "",
 }
