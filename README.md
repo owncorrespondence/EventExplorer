@@ -10,23 +10,31 @@ React Native stack.
 
 ## Getting Started
 
-To start need to create .env file with a key TICKETMASTER_API_KEY="provide you own key"
-Ruby 
-Please check if version of ruby is appropriate for the rn app. For me 3.3.2 is good could be installed throw rbenv.
-ruby -v
-ruby 3.3.2 (2024-05-30 revision e5a195edf6) [arm64-darwin25]
+Prerequisites
+Make sure you have the following versions installed. These are the versions this project was built and tested against.
 
-Java
-java --version
-openjdk 17.0.15 2025-04-15 LTS
+Tool	Version	Notes
+Node	v22.11.0
+Ruby	3.3.2	Install via rbenv. Required for CocoaPods (iOS).
+Java	17 (OpenJDK 17 LTS)	Required for Android builds.
 
-Node
+Verify your local versions:
 
-node -v
-v22.11.0
+node -v      # v22.11.0
+ruby -v      # ruby 3.3.2 (2024-05-30 revision e5a195edf6) [arm64-darwin25]
+java --version   # openjdk 17.0.15 2025-04-15 LTS
+Ruby: any recent 3.3.x should work; 3.3.2 is confirmed. If pod install fails, check that ruby -v points at your rbenv version and not the system Ruby.
 
-```bash
+Environment setup
+Create a .env file in the project root with your Ticketmaster API key:
+
+TICKETMASTER_API_KEY="your_own_key_here"
+Get a key from the Ticketmaster Developer Portal. The .env file is git-ignored — never commit your key.
+
+Getting started
+Install dependencies and start the app:
+
 yarn install
 yarn start
-```
+
 
