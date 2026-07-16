@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, memo } from "react"
 
 import { EventCard } from "@/components/EventCard"
 import { FavouriteButton } from "@/components/Toggle/FavouriteButton"
@@ -10,7 +10,7 @@ interface SearchEventCardProps {
   onItemPress: (eventId: string) => void
 }
 
-export const SearchEventCard: FC<SearchEventCardProps> = ({ item, onItemPress }) => {
+export const SearchEventCard: FC<SearchEventCardProps> = memo(({ item, onItemPress }) => {
   const favourite = useIsFavourite(item.id)
   const toggle = useToggleFavourite()
 
@@ -31,6 +31,6 @@ export const SearchEventCard: FC<SearchEventCardProps> = ({ item, onItemPress })
       rightIcon={<FavouriteButton liked={favourite} onToggle={handleFavouritesPress} />}
     />
   )
-}
+})
 
 SearchEventCard.displayName = "SearchEventCard"

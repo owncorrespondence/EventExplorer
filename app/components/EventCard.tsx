@@ -18,6 +18,8 @@ interface EventCardProps {
 
 const IMAGE_SIZE = 88
 
+export const ITEM_HEIGHT = 112
+
 export const EventCard: FC<EventCardProps> = memo(({ item, onItemPress, rightIcon = null }) => {
   const { themed } = useAppTheme()
 
@@ -67,7 +69,7 @@ const $viewPresets: ThemedStyleArray<ViewStyle> = [
     backgroundColor: colors.palette.neutral100,
     gap: spacing.sm,
     padding: spacing.sm,
-    height: 112,
+    height: ITEM_HEIGHT,
     flexDirection: "row",
     ...elevation.subtle,
   }),

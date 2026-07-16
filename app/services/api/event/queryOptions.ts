@@ -10,6 +10,7 @@ import Config from "@/config"
 import { api } from "@/services/api"
 import { EVENT_KEYS } from "@/services/api/event/eventsKeys"
 import { EventDetailsResponse, EventsSearchResponse } from "@/services/api/event/types"
+import { withThrowable } from "@/utils/errors"
 
 export const getEventsQueryOptions = () => {
   return queryOptions<ApiResponse<EventsSearchResponse>>({
@@ -19,9 +20,11 @@ export const getEventsQueryOptions = () => {
         apikey: Config.API_KEY,
         size: "20",
       })
-      return api.apisauce.get<EventsSearchResponse>(
-        `/discovery/v2/events.json?${params.toString()}`,
-      )
+      return withThrowable<EventsSearchResponse>(() => {
+        return api.apisauce.get<EventsSearchResponse>(
+          `/discovery/v2/events.json?${params.toString()}`,
+        )
+      })
     },
   })
 }
@@ -53,9 +56,11 @@ export const getInfinityQueryOptions = (keyword?: string) => {
       if (keyword) {
         params.set("keyword", keyword)
       }
-      return api.apisauce.get<EventsSearchResponse>(
-        `/discovery/v2/events.json?${params.toString()}`,
-      )
+      return withThrowable<EventsSearchResponse>(() => {
+        return api.apisauce.get<EventsSearchResponse>(
+          `/discovery/v2/events.json?${params.toString()}`,
+        )
+      })
     },
   })
 }
@@ -68,7 +73,9 @@ export const getEventDetails = (eventId: string) => {
         apikey: Config.API_KEY,
         size: "20",
       })
-      return api.apisauce.get(`/discovery/v2/events/${eventId}/?${params.toString()}`)
+      return withThrowable<EventDetailsResponse>(() => {
+        return api.apisauce.get(`/discovery/v2/events/${eventId}/?${params.toString()}`)
+      })
     },
   })
 }

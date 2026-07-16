@@ -8,11 +8,22 @@ const en = {
     logOut: "Log Out",
     toggleTheme: "Toggle Theme {{theme}} ",
   },
+  errors: {
+    invalidEmail: "Invalid email address.",
+    noConnection: "No internet connection. Check your network and try again.",
+    timeout: "The request timed out. Try again.",
+    tooManyRequests: "Too many requests — please wait a moment and retry.",
+    accessDenied: "Access denied. Please try again later.",
+    server: "Ticketmaster is having issues. Try again shortly.",
+    badRequest: "Something went wrong with that request.",
+    generic: "Something went wrong. Please try again.",
+  },
 
   eventsScreen: {
     favourites: "Favourites",
     search: "Search events",
     placeholder: "Artist…",
+    retryLoadMore: "Retry Load More",
   },
   favouriteEventsScreen: {
     button: {
@@ -43,12 +54,10 @@ const en = {
       heading: "So empty... so sad",
       content: "No data found yet. Try clicking the button to refresh or reload the app.",
       button: "Let's try this again",
+      couldNotLoad: "Couldn't load events",
     },
   },
 
-  errors: {
-    invalidEmail: "Invalid email address.",
-  },
   loginScreen: {
     logIn: "Log In",
     enterDetails:

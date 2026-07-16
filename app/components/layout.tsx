@@ -26,3 +26,8 @@ export const $globalLoadingContainer: ThemedStyle<ViewStyle> = ({ spacing }) => 
   paddingHorizontal: spacing.md,
   justifyContent: "center",
 })
+
+export const $aligner: ThemedStyle<ViewStyle> = () => ({
+  justifyContent: "center",
+  flex: 1,
+})
