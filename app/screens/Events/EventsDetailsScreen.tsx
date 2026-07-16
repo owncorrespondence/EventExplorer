@@ -40,16 +40,19 @@ export const EventsDetailsScreen = () => {
     gcTime: 1000 * 60 * 5,
   })
 
-  const handleFavouritePress = useCallback((item: EventDetailsView) => {
-    toggle({
-      id: item.id,
-      name: item.name,
-      heroImage: item.heroImage,
-      dateInfo: item.dateInfo,
-      tags: item.tags,
-      savedAt: Date.now(),
-    })
-  }, [])
+  const handleFavouritePress = useCallback(
+    (item: EventDetailsView) => {
+      toggle({
+        id: item.id,
+        name: item.name,
+        heroImage: item.heroImage,
+        dateInfo: item.dateInfo,
+        tags: item.tags,
+        savedAt: Date.now(),
+      })
+    },
+    [toggle],
+  )
 
   if (isLoading || (isFetching && !data)) {
     return (
@@ -89,17 +92,19 @@ export const EventsDetailsScreen = () => {
           <Text style={themed($title)} numberOfLines={3}>
             {data.name}
           </Text>
-
           <Text style={themed($content)}>{data.dateInfo.date}</Text>
           <Text style={themed($content)}>{data.dateInfo.time}</Text>
-          <Text style={themed($content)}>{data.venue?.name}</Text>
-          <Text style={themed($content)}>{data.venue?.cityCountry}</Text>
-          <View style={themed($tagList)}>
-            {data.tags.map((el) => {
-              return <Tag key={el} label={el} />
-            })}
-          </View>
-
+          {data?.venue?.name ? <Text style={themed($content)}>{data.venue?.name}</Text> : null}
+          {data?.venue?.cityCountry ? (
+            <Text style={themed($content)}>{data.venue?.cityCountry}</Text>
+          ) : null}
+          {data?.tags?.length ? (
+            <View style={themed($tagList)}>
+              {data.tags.map((el) => {
+                return <Tag key={el} label={el} />
+              })}
+            </View>
+          ) : null}
           {data?.price ? <Text>{data.price}</Text> : null}
         </View>
       </ScrollView>

@@ -1,5 +1,12 @@
-import { FC, useCallback } from "react"
-import { ActivityIndicator, FlatList, ListRenderItemInfo, View, ViewStyle } from "react-native"
+import { FC, useCallback, useState } from "react"
+import {
+  ActivityIndicator,
+  FlatList,
+  ListRenderItemInfo,
+  RefreshControl,
+  View,
+  ViewStyle,
+} from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 
@@ -13,14 +20,20 @@ import { SearchEventCard } from "@/screens/Events/components/SearchEventCard"
 import { EventDetailsView, toEventDetailsView } from "@/services/api/event/eventMappers"
 import { EVENT_KEYS } from "@/services/api/event/eventsKeys"
 import { getInfinityQueryOptions } from "@/services/api/event/queryOptions"
-import { TicketmasterEvent } from "@/services/api/event/types"
 import { useFavourites } from "@/state/favourites/selectors"
 import { useAppTheme } from "@/theme/context"
 import { ThemedStyle } from "@/theme/types"
+import { useDebouncedValue } from "@/utils/useDebounced"
 
 export const EventsScreen = () => {
   const { themed } = useAppTheme()
-  const queryclient = useQueryClient()
+  const queryClient = useQueryClient()
+
+  const [search, setSearch] = useState("")
+  const debouncedSearch = useDebouncedValue(search, 400)
+  const {
+    theme: { colors },
+  } = useAppTheme()
   const navigation = useNavigation<EventsStackScreenProps<Routes["EVENTS"]>["navigation"]>()
   const favourites = useFavourites() // reads MMKV — no fetch, works offline
   const {
@@ -33,27 +46,25 @@ export const EventsScreen = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    ...getInfinityQueryOptions(),
+    ...getInfinityQueryOptions(debouncedSearch),
     select: (data) => {
       const arr = data.pages.flatMap((page) => page.data?._embedded?.events || [])
-
       return arr.map((el) => toEventDetailsView(el, 88, "4_3"))
-      // return data.pages.flatMap((page) => page.data?._embedded?.events || [])
     },
   })
 
   const onRefresh = useCallback(async () => {
-    const { queryKey } = getInfinityQueryOptions()
+    const { queryKey } = getInfinityQueryOptions(debouncedSearch)
 
-    queryclient.setQueryData(queryKey, (old) =>
+    queryClient.setQueryData(queryKey, (old) =>
       old ? { pages: old.pages.slice(0, 1), pageParams: old.pageParams.slice(0, 1) } : old,
     )
 
     await Promise.all([
       refetch(),
-      queryclient.invalidateQueries({ queryKey: EVENT_KEYS.details() }),
+      queryClient.invalidateQueries({ queryKey: EVENT_KEYS.details() }),
     ])
-  }, [queryclient, refetch])
+  }, [queryClient, refetch, debouncedSearch])
 
   const goToEvent = useCallback(
     (eventId: string) => {
@@ -92,17 +103,28 @@ export const EventsScreen = () => {
   if (isError) {
     return null
   }
+
   return (
-    <Screen preset={"fixed"} style={themed($container)}>
+    <Screen preset={"fixed"} style={themed($container)} safeAreaEdges={["bottom"]}>
+      <ListHeader
+        hasFavourites={Boolean(favourites.length)}
+        goToFavourites={goToFavourites}
+        value={search}
+        onChangeText={setSearch}
+      />
       <FlatList
-        ListHeaderComponent={
-          <ListHeader hasFavourites={Boolean(favourites.length)} goToFavourites={goToFavourites} />
-        }
-        stickyHeaderIndices={[0]}
         contentContainerStyle={themed($contentContainerList)}
         data={data || []}
-        refreshing={isRefetching}
-        onRefresh={onRefresh}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={onRefresh}
+            tintColor={colors.tint}
+            titleColor={colors.textDim}
+            colors={[colors.tint]}
+            progressBackgroundColor={colors.background}
+          />
+        }
         onEndReachedThreshold={0.5}
         onEndReached={() => {
           if (hasNextPage && !isFetchingNextPage) {
@@ -124,7 +146,6 @@ export const EventsScreen = () => {
             />
           )
         }
-
         renderItem={renderItem}
       />
     </Screen>
@@ -138,21 +159,41 @@ const $activityIndicator: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 interface ListHeaderProps {
   goToFavourites?: () => void
   hasFavourites?: boolean
+  value: string
+  onChangeText: (t: string) => void
 }
 
-const ListHeader: FC<ListHeaderProps> = ({ hasFavourites, goToFavourites }) => {
-  const {
-    theme: { colors },
-  } = useAppTheme()
+const ListHeader: FC<ListHeaderProps> = ({
+  hasFavourites,
+  goToFavourites,
+  value,
+  onChangeText,
+}) => {
+  const { themed } = useAppTheme()
   return (
-    <View style={{ backgroundColor: colors.background }}>
-      {hasFavourites ? <Button onPress={goToFavourites} tx={"eventsScreen:favourites"} /> : null}
-      <TextField labelTx={"eventsScreen:search"} placeholderTx={"eventsScreen:placeholder"} />
+    <View style={themed($header)}>
+      {hasFavourites ? (
+        <View style={themed($favouriteSection)}>
+          <Button onPress={goToFavourites} tx="eventsScreen:favourites" />
+        </View>
+      ) : null}
+      <TextField
+        accessibilityRole={"search"}
+        value={value}
+        onChangeText={onChangeText}
+        labelTx="eventsScreen:search"
+        placeholderTx="eventsScreen:placeholder"
+      />
     </View>
   )
 }
 
 const $header: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  backgroundColor: colors.background, // ⬅️ opaque → rows can't show through
-  paddingBottom: spacing.sm, // gap between header and first row
+  backgroundColor: colors.background,
+  gap: spacing.sm,
+  paddingBottom: spacing.md,
+})
+
+const $favouriteSection: ThemedStyle<ViewStyle> = () => ({
+  alignItems: "flex-end",
 })

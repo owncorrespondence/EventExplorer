@@ -19,7 +19,7 @@ export const $contentContainerList: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 })
 
 export const $container: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingHorizontal: spacing.md,
+  padding: spacing.md,
 })
 
 export const $globalLoadingContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({

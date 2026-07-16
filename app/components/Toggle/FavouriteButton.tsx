@@ -51,7 +51,14 @@ const FavouriteButton = memo(({ liked, onToggle, size = 24 }: FavouriteButtonPro
   }))
 
   return (
-    <Pressable onPress={onToggle} hitSlop={10} style={themed($button)}>
+    <Pressable
+      onPress={onToggle}
+      hitSlop={10}
+      style={themed($button)}
+      accessibilityRole={"button"}
+      accessibilityHint={"Add article into favourites"}
+      accessibilityLabel={"Favourite"}
+    >
       <Animated.View style={containerStyle}>
         <Svg width={size} height={size} viewBox="0 0 24 24">
           <AnimatedPath

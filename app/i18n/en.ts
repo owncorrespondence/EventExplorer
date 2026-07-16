@@ -11,8 +11,8 @@ const en = {
 
   eventsScreen: {
     favourites: "Favourites",
-    search: "Search event",
-    placeholder: "World cup",
+    search: "Search events",
+    placeholder: "Artist…",
   },
   favouriteEventsScreen: {
     button: {

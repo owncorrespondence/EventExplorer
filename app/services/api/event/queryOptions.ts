@@ -15,20 +15,24 @@ export const getEventsQueryOptions = () => {
   return queryOptions<ApiResponse<EventsSearchResponse>>({
     queryKey: EVENT_KEYS.all,
     queryFn: async () => {
+      const params = new URLSearchParams({
+        apikey: Config.API_KEY,
+        size: "20",
+      })
       return api.apisauce.get<EventsSearchResponse>(
-        `/discovery/v2/events.json?apikey=${Config.API_KEY}`,
+        `/discovery/v2/events.json?${params.toString()}`,
       )
     },
   })
 }
 
-export const getInfinityQueryOptions = () => {
+export const getInfinityQueryOptions = (keyword?: string) => {
   return infiniteQueryOptions<
     ApiResponse<EventsSearchResponse>,
     Error,
     InfiniteData<ApiResponse<EventsSearchResponse>>
   >({
-    queryKey: EVENT_KEYS.all,
+    queryKey: EVENT_KEYS.list(keyword || ""),
     placeholderData: keepPreviousData,
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
@@ -40,8 +44,17 @@ export const getInfinityQueryOptions = () => {
     },
 
     queryFn: async ({ pageParam }) => {
+      const params = new URLSearchParams({
+        apikey: Config.API_KEY,
+        page: String(pageParam),
+        size: "20",
+        sort: "date,desc",
+      })
+      if (keyword) {
+        params.set("keyword", keyword)
+      }
       return api.apisauce.get<EventsSearchResponse>(
-        `/discovery/v2/events.json?apikey=${Config.API_KEY}&page=${pageParam}&size=20&sort=date,desc`,
+        `/discovery/v2/events.json?${params.toString()}`,
       )
     },
   })
@@ -51,7 +64,11 @@ export const getEventDetails = (eventId: string) => {
   return queryOptions<ApiResponse<EventDetailsResponse>>({
     queryKey: EVENT_KEYS.detail(eventId),
     queryFn: async () => {
-      return api.apisauce.get(`/discovery/v2/events/${eventId}?apikey=${Config.API_KEY}`)
+      const params = new URLSearchParams({
+        apikey: Config.API_KEY,
+        size: "20",
+      })
+      return api.apisauce.get(`/discovery/v2/events/${eventId}/?${params.toString()}`)
     },
   })
 }
