@@ -10,3 +10,5 @@ export const useFavourites = () =>
   )
 export const useToggleFavourite = () => useFavouritesStore((s) => s.toggle)
 export const useRemoveFavourite = () => useFavouritesStore((s) => s.remove)
+
+export const useClearFavourite = () => useFavouritesStore((s) => s.clear)

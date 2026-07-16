@@ -13,6 +13,7 @@ interface FavouritesState {
   add: (event: FavouriteEvent) => void
   remove: (id: string) => void
   toggle: (event: FavouriteEvent) => void
+  clear: () => void
 }
 
 export const useFavouritesStore = create<FavouritesState>()(
@@ -27,6 +28,10 @@ export const useFavouritesStore = create<FavouritesState>()(
           return { favourites: next }
         }),
       toggle: (event) => (get().favourites[event.id] ? get().remove(event.id) : get().add(event)),
+      clear: () =>
+        set({
+          favourites: {},
+        }),
     }),
     {
       name: "favourites",
