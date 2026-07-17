@@ -1,6 +1,8 @@
 import { createContext, FC, PropsWithChildren, useCallback, useContext, useMemo } from "react"
 import { useMMKVString } from "react-native-mmkv"
 
+import { useClearFavourite } from "@/state/favourites/selectors"
+
 export type AuthContextType = {
   isAuthenticated: boolean
   authToken?: string
@@ -19,10 +21,13 @@ export const AuthProvider: FC<PropsWithChildren<AuthProviderProps>> = ({ childre
   const [authToken, setAuthToken] = useMMKVString("AuthProvider.authToken")
   const [authEmail, setAuthEmail] = useMMKVString("AuthProvider.authEmail")
 
+  const clearFavourites = useClearFavourite()
+
   const logout = useCallback(() => {
     setAuthToken(undefined)
     setAuthEmail("")
-  }, [setAuthEmail, setAuthToken])
+    clearFavourites()
+  }, [setAuthEmail, setAuthToken, clearFavourites])
 
   const validationError = useMemo(() => {
     if (!authEmail || authEmail.length === 0) return "can't be blank"
